@@ -88,7 +88,7 @@ session_manager = ProductionSessionManager()
 
 # Import your scraping functions
 try:
-    from foscos_scraper import extract_license_with_llm, automate_foscos_form
+    from scraper import extract_license_with_llm, automate_foscos_form
     SCRAPING_AVAILABLE = True
 except ImportError as e:
     logger.warning(f"Scraping modules not available: {e}")
