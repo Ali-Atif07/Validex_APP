@@ -177,6 +177,8 @@ def start_scraping():
     """Start scraping with CAPTCHA support"""
     try:
         data = request.get_json()
+        if not data:
+            return jsonify({'error': 'No data provided'}), 400
         license_number = data.get('license_number')
         url = data.get('url')
         
@@ -207,42 +209,42 @@ def start_scraping():
 
 
 
-@app.route('/api/scrape', methods=['POST'])
-def start_scraping():
-    try:
-        data = request.get_json()
-        if not data:
-            return jsonify({'error': 'No data provided'}), 400
+# @app.route('/api/scrape', methods=['POST'])
+# def start_scraping():
+#     try:
+#         data = request.get_json()
+#         if not data:
+#             return jsonify({'error': 'No data provided'}), 400
         
-        license_number = data.get('license_number')
-        url = data.get('url')
+#         license_number = data.get('license_number')
+#         url = data.get('url')
         
-        if not license_number and not url:
-            return jsonify({'error': 'License number or URL required'}), 400
+#         if not license_number and not url:
+#             return jsonify({'error': 'License number or URL required'}), 400
         
-        # Create session
-        session = session_manager.create_session({
-            'license_number': license_number,
-            'url': url
-        })
+#         # Create session
+#         session = session_manager.create_session({
+#             'license_number': license_number,
+#             'url': url
+#         })
         
-        # Start background process
-        thread = threading.Thread(
-            target=run_scraping_process,
-            args=(session['sessionId'], license_number, url)
-        )
-        thread.daemon = True
-        thread.start()
+#         # Start background process
+#         thread = threading.Thread(
+#             target=run_scraping_process,
+#             args=(session['sessionId'], license_number, url)
+#         )
+#         thread.daemon = True
+#         thread.start()
         
-        return jsonify({
-            'sessionId': session['sessionId'],
-            'status': 'started',
-            'message': 'Scraping process initiated'
-        })
+#         return jsonify({
+#             'sessionId': session['sessionId'],
+#             'status': 'started',
+#             'message': 'Scraping process initiated'
+#         })
         
-    except Exception as e:
-        logger.error(f"Error starting scraping: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+#     except Exception as e:
+#         logger.error(f"Error starting scraping: {str(e)}")
+#         return jsonify({'error': str(e)}), 500
 
 
 
